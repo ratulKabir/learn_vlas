@@ -5,22 +5,20 @@ import os
 import jax
 import tqdm
 import tensorflow_datasets as tfds
+import matplotlib.pyplot as plt
 from octo.model.octo_model import OctoModel
 
-
+ 
+ACTION_DIM_LABELS = ['x', 'y', 'z', 'yaw', 'pitch', 'roll', 'grasp']
 WINDOW_SIZE = 2
 
 
 model = OctoModel.load_pretrained("hf://rail-berkeley/octo-small")
-# print(model.get_pretty_spec())
-
 # create RLDS dataset builder
 builder = tfds.builder_from_directory(builder_dir='gs://gresearch/robotics/bridge/0.1.0/')
 ds = builder.as_dataset(split='train[:1]')
- 
 # sample episode + resize to 256x256 (default third-person cam resolution)
 episode = next(iter(ds))
-# print(episode)
  
 steps = list(episode['steps'])
 images = [cv2.resize(np.array(step['observation']['image']), (256, 256)) for step in steps]
@@ -72,9 +70,6 @@ for step in tqdm.tqdm(range(0, len(images) - WINDOW_SIZE + 1)):
         ), axis=-1
     ))
 
-import matplotlib.pyplot as plt
- 
-ACTION_DIM_LABELS = ['x', 'y', 'z', 'yaw', 'pitch', 'roll', 'grasp']
  
 # build image strip to show above actions
 img_strip = np.concatenate(np.array(images[::3]), axis=1)
