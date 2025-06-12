@@ -16,3 +16,18 @@ pip install scipy==1.11.0
 ```
 
 > **Note:** Adjust the JAX installation command according to your CUDA version.
+
+## Running SmolVLM Models
+
+To set up the environment for SmolVLM models:
+
+```bash
+conda create -n smolvlm python=3.10
+conda activate smolvlm
+pip install -r requirements.txt
+# Install PyTorch for your CUDA version, e.g., for CUDA 12.4:
+pip install torch==2.6.0 torchvision==0.21.0 torchaudio==2.6.0 --index-url https://download.pytorch.org/whl/cu124
+pip install flash-attn --no-build-isolation
+```
+
+> **Note:** Replace the PyTorch install command with the one matching your CUDA version from [PyTorch Get Started](https://pytorch.org/get-started/locally/).
